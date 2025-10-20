@@ -519,7 +519,7 @@ namespace DelvUI.Interface.StatusEffects
             {
                 ImGui.Text("    ");
                 ImGui.SameLine();
-                ImGui.Text("Type an ID or Name");
+                ImGui.Text("输入ID或名称");
 
                 ImGui.Text("    ");
                 ImGui.SameLine();
@@ -548,12 +548,12 @@ namespace DelvUI.Interface.StatusEffects
                     ImGui.OpenPopup("export_succes_popup");
                 }
                 ImGui.PopFont();
-                ImGuiHelper.SetTooltip("Export List to Clipboard");
+                ImGuiHelper.SetTooltip("导出列表到剪贴板");
 
                 // export success popup
                 if (ImGui.BeginPopup("export_succes_popup"))
                 {
-                    ImGui.Text("List exported to clipboard!");
+                    ImGui.Text("列表已导出到剪贴板！");
                     ImGui.EndPopup();
                 }
 
@@ -565,7 +565,7 @@ namespace DelvUI.Interface.StatusEffects
                     _importString = ImGui.GetClipboardText();
                 }
                 ImGui.PopFont();
-                ImGuiHelper.SetTooltip("Import List from Clipboard");
+                ImGuiHelper.SetTooltip("从剪贴板导入列表");
 
                 // clear
                 ImGui.SameLine();
@@ -575,16 +575,16 @@ namespace DelvUI.Interface.StatusEffects
                     _clearingList = true;
                 }
                 ImGui.PopFont();
-                ImGuiHelper.SetTooltip("Clear List");
+                ImGuiHelper.SetTooltip("清空列表");
 
                 ImGui.Text("    ");
                 ImGui.SameLine();
 
                 if (ImGui.BeginTable("table", 4, flags, new Vector2(583, List.Count > 0 ? 200 : 40)))
                 {
-                    ImGui.TableSetupColumn("Icon", ImGuiTableColumnFlags.WidthFixed, 0, 0);
+                    ImGui.TableSetupColumn("图标", ImGuiTableColumnFlags.WidthFixed, 0, 0);
                     ImGui.TableSetupColumn("ID", ImGuiTableColumnFlags.WidthFixed, 0, 1);
-                    ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch, 0, 2);
+                    ImGui.TableSetupColumn("名称", ImGuiTableColumnFlags.WidthStretch, 0, 2);
                     ImGui.TableSetupColumn("", ImGuiTableColumnFlags.WidthFixed, 0, 3);
 
                     ImGui.TableSetupScrollFreeze(0, 1);
@@ -647,7 +647,7 @@ namespace DelvUI.Interface.StatusEffects
                 }
                 ImGui.Text("    ");
                 ImGui.SameLine();
-                ImGui.Text("Tip: You can [Ctrl + Alt + Shift] + Left Click on a status effect to automatically add it to the list.");
+                ImGui.Text("提示：您可以 [Ctrl + Alt + Shift] + 左键单击状态效果以自动添加到列表。");
 
             }
 
@@ -671,10 +671,10 @@ namespace DelvUI.Interface.StatusEffects
             if (_importString != null)
             {
                 string[] message = new string[] {
-                    "All the elements in the list will be replaced.",
-                    "Are you sure you want to import?"
+                    "列表中的所有元素都将被替换。",
+                    "确定要导入吗？"
                 };
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("Import?", message);
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("导入？", message);
 
                 if (didConfirm)
                 {
@@ -691,9 +691,9 @@ namespace DelvUI.Interface.StatusEffects
             // clear confirmation
             if (_clearingList)
             {
-                string message = "Are you sure you want to clear the list?";
+                string message = "确定要清空列表吗？";
 
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("Clear List?", message);
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("清空列表？", message);
 
                 if (didConfirm)
                 {

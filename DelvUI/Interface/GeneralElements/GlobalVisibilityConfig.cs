@@ -1,6 +1,7 @@
 ﻿using DelvUI.Config;
 using DelvUI.Config.Attributes;
 using DelvUI.Helpers;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using Newtonsoft.Json;
 using System.Numerics;
@@ -26,15 +27,19 @@ namespace DelvUI.Interface.GeneralElements
         {
             ImGui.NewLine();
 
-            if (ImGui.Button("Apply to all elements", new Vector2(200, 30)))
+            if (ImGui.Button(LocalizationManager.Instance.Translate("Apply to all elements"), new Vector2(200, 30)))
             {
                 _applying = true;
             }
 
             if (_applying)
             {
-                string[] lines = new string[] { "This will replace the visibility settings", "for ALL DelvUI elements!", "Are you sure?" };
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("Apply?", lines);
+                string[] lines = new string[] { 
+                    LocalizationManager.Instance.Translate("This will replace the visibility settings"), 
+                    LocalizationManager.Instance.Translate("for ALL DelvUI elements!"), 
+                    LocalizationManager.Instance.Translate("Are you sure?") 
+                };
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal(LocalizationManager.Instance.Translate("Apply?"), lines);
 
                 if (didConfirm)
                 {

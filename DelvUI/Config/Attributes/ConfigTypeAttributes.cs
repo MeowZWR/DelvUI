@@ -3,6 +3,7 @@ using Dalamud.Interface.Utility;
 using DelvUI.Enums;
 using DelvUI.Helpers;
 using DelvUI.Interface.GeneralElements;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using System;
 using System.Collections.Generic;
@@ -95,7 +96,9 @@ namespace DelvUI.Config.Attributes
 
             if (help != null && ImGui.IsItemHovered())
             {
-                ImGui.SetTooltip(help);
+                // 翻译帮助文本
+                string translatedHelp = LocalizationManager.Instance.Translate(help);
+                ImGui.SetTooltip(translatedHelp);
             }
 
             return result;
@@ -137,7 +140,11 @@ namespace DelvUI.Config.Attributes
             bool? fieldVal = (bool?)field.GetValue(config);
             bool boolVal = fieldVal.HasValue ? fieldVal.Value : false;
 
-            if (ImGui.Checkbox(ID != null && friendlyName == "Enabled" && !collapsingHeader ? ID : friendlyName + IDText(ID), ref boolVal))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            string displayText = ID != null && friendlyName == "Enabled" && !collapsingHeader ? ID : translatedLabel + IDText(ID);
+
+            if (ImGui.Checkbox(displayText, ref boolVal))
             {
                 field.SetValue(config, boolVal);
 
@@ -175,7 +182,9 @@ namespace DelvUI.Config.Attributes
 
             for (int i = 0; i < _options.Length; i++)
             {
-                changed |= ImGui.RadioButton(_options[i], ref intVal, i);
+                // 翻译选项
+                string translatedOption = LocalizationManager.Instance.Translate(_options[i]);
+                changed |= ImGui.RadioButton(translatedOption, ref intVal, i);
                 if (i < _options.Length - 1)
                 {
                     ImGui.SameLine();
@@ -211,7 +220,9 @@ namespace DelvUI.Config.Attributes
             float? fieldVal = (float?)field.GetValue(config);
             float floatVal = fieldVal.HasValue ? fieldVal.Value : 0;
 
-            if (ImGui.DragFloat(friendlyName + IDText(ID), ref floatVal, velocity, min, max))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            if (ImGui.DragFloat(translatedLabel + IDText(ID), ref floatVal, velocity, min, max))
             {
                 field.SetValue(config, floatVal);
 
@@ -243,7 +254,9 @@ namespace DelvUI.Config.Attributes
             int? fieldVal = (int?)field.GetValue(config);
             int intVal = fieldVal.HasValue ? fieldVal.Value : 0;
 
-            if (ImGui.DragInt(friendlyName + IDText(ID), ref intVal, velocity, min, max))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            if (ImGui.DragInt(translatedLabel + IDText(ID), ref intVal, velocity, min, max))
             {
                 field.SetValue(config, intVal);
 
@@ -275,7 +288,9 @@ namespace DelvUI.Config.Attributes
             Vector2? fieldVal = (Vector2?)field.GetValue(config);
             Vector2 vectorVal = fieldVal.HasValue ? fieldVal.Value : Vector2.Zero;
 
-            if (ImGui.DragFloat2(friendlyName + IDText(ID), ref vectorVal, velocity, min, max))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            if (ImGui.DragFloat2(translatedLabel + IDText(ID), ref vectorVal, velocity, min, max))
             {
                 field.SetValue(config, vectorVal);
 
@@ -307,7 +322,9 @@ namespace DelvUI.Config.Attributes
             Vector2? fieldVal = (Vector2?)field.GetValue(config);
             Vector2 vectorVal = fieldVal.HasValue ? fieldVal.Value : Vector2.Zero;
 
-            if (ImGui.DragFloat2(friendlyName + IDText(ID), ref vectorVal, velocity, min, max))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            if (ImGui.DragFloat2(translatedLabel + IDText(ID), ref vectorVal, velocity, min, max))
             {
                 field.SetValue(config, vectorVal);
 
@@ -342,9 +359,12 @@ namespace DelvUI.Config.Attributes
 
             string popupId = ID != null ? "DelvUI_TextTagsList " + ID : "DelvUI_TextTagsList ##" + friendlyName;
 
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            
             if (!formattable)
             {
-                if (ImGui.InputText(friendlyName + IDText(ID), ref stringVal))
+                if (ImGui.InputText(translatedLabel + IDText(ID), ref stringVal))
                 {
                     finalValue = stringVal;
                 }
@@ -356,7 +376,7 @@ namespace DelvUI.Config.Attributes
                 float height = Math.Max(24 * scale, ImGui.CalcTextSize(stringVal, false, width).Y + 6 * scale);
                 Vector2 size = new Vector2(width, height);
 
-                if (ImGui.InputTextMultiline(friendlyName + IDText(ID), ref stringVal, maxLength, size, ImGuiInputTextFlags.AllowTabInput))
+                if (ImGui.InputTextMultiline(translatedLabel + IDText(ID), ref stringVal, maxLength, size, ImGuiInputTextFlags.AllowTabInput))
                 {
                     finalValue = stringVal;
                 }
@@ -370,7 +390,7 @@ namespace DelvUI.Config.Attributes
                 }
                 ImGui.PopFont();
 
-                ImGuiHelper.SetTooltip("Text Tags");
+                ImGuiHelper.SetTooltip("文本标签");
             }
 
             var selectedTag = ImGuiHelper.DrawTextTagsList(popupId, ref _searchText);
@@ -401,7 +421,9 @@ namespace DelvUI.Config.Attributes
             PluginConfigColor? colorVal = (PluginConfigColor?)field.GetValue(config);
             Vector4 vector = (colorVal != null ? colorVal.Vector : Vector4.Zero);
 
-            if (ImGui.ColorEdit4(friendlyName + IDText(ID), ref vector, ImGuiColorEditFlags.AlphaPreview | ImGuiColorEditFlags.AlphaBar))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            if (ImGui.ColorEdit4(translatedLabel + IDText(ID), ref vector, ImGuiColorEditFlags.AlphaPreview | ImGuiColorEditFlags.AlphaBar))
             {
                 if (colorVal is null)
                 {
@@ -440,7 +462,11 @@ namespace DelvUI.Config.Attributes
                 intVal = (int)fieldVal;
             }
 
-            if (ImGui.Combo(friendlyName + IDText(ID), ref intVal, options, 4))
+            // 翻译标签和选项
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            string[] translatedOptions = options.Select(opt => LocalizationManager.Instance.Translate(opt)).ToArray();
+            
+            if (ImGui.Combo(translatedLabel + IDText(ID), ref intVal, translatedOptions, 4))
             {
                 field.SetValue(config, intVal);
 
@@ -465,14 +491,19 @@ namespace DelvUI.Config.Attributes
 
         public override bool DrawField(FieldInfo field, PluginConfigObject config, string? ID, bool collapsingHeader)
         {
-            ImGui.Text(friendlyName);
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            ImGui.Text(translatedLabel);
+            
             int[]? fieldVal = (int[]?)field.GetValue(config);
             int[] order = fieldVal ?? Array.Empty<int>();
 
             for (int i = 0; i < order.Length; i++)
             {
                 ImGui.SameLine();
-                ImGui.Button(names[order[i]], new Vector2(100, 25));
+                // 翻译选项名称
+                string translatedName = LocalizationManager.Instance.Translate(names[order[i]]);
+                ImGui.Button(translatedName, new Vector2(100, 25));
 
                 if (ImGui.IsItemActive())
                 {
@@ -537,7 +568,9 @@ namespace DelvUI.Config.Attributes
 
             var options = fontsConfig.Fonts.Values.Select(fontData => fontData.Name + "  " + fontData.Size.ToString()).ToArray();
 
-            if (ImGui.Combo(friendlyName + IDText(ID), ref index, options, 4))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            if (ImGui.Combo(translatedLabel + IDText(ID), ref index, options, 4))
             {
                 stringVal = fontsConfig.Fonts.Keys[index];
                 field.SetValue(config, stringVal);
@@ -574,7 +607,9 @@ namespace DelvUI.Config.Attributes
 
             string[] options = textures.ToArray();
 
-            if (ImGui.Combo(friendlyName + IDText(ID), ref index, options, 10))
+            // 翻译标签
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            if (ImGui.Combo(translatedLabel + IDText(ID), ref index, options, 10))
             {
                 stringVal = options[index];
                 field.SetValue(config, stringVal);
@@ -592,7 +627,7 @@ namespace DelvUI.Config.Attributes
     public class AnchorAttribute : ComboAttribute
     {
         public AnchorAttribute(string friendlyName)
-            : base(friendlyName, new string[] { "Center", "Left", "Right", "Top", "TopLeft", "TopRight", "Bottom", "BottomLeft", "BottomRight" })
+            : base(friendlyName, new string[] { "Center", "Left", "Right", "Top", "Top Left", "Top Right", "Bottom", "Bottom Left", "Bottom Right" })
         {
         }
     }
@@ -625,7 +660,11 @@ namespace DelvUI.Config.Attributes
                 intVal = (int)fieldVal;
             }
 
-            if (ImGui.Combo(friendlyName + IDText(ID), ref intVal, options, 4))
+            // 翻译标签和选项
+            string translatedLabel = LocalizationManager.Instance.Translate(friendlyName);
+            string[] translatedOptions = options.Select(opt => LocalizationManager.Instance.Translate(opt)).ToArray();
+            
+            if (ImGui.Combo(translatedLabel + IDText(ID), ref intVal, translatedOptions, 4))
             {
                 field.SetValue(config, (StrataLevel?)intVal);
 

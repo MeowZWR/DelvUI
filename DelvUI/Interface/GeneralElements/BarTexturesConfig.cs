@@ -6,6 +6,7 @@ using DelvUI.Config.Attributes;
 using DelvUI.Enums;
 using DelvUI.Helpers;
 using DelvUI.Interface.Bars;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using ImGuiScene;
 using Newtonsoft.Json;
@@ -55,7 +56,7 @@ namespace DelvUI.Interface.GeneralElements
                 }
             };
 
-            _fileDialogManager.OpenFolderDialog("Select Bar Textures Folder", callback);
+            _fileDialogManager.OpenFolderDialog(LocalizationManager.Instance.Translate("Select Bar Textures Folder"), callback);
         }
 
         [ManualDraw]
@@ -64,12 +65,17 @@ namespace DelvUI.Interface.GeneralElements
             if (BarTexturesManager.Instance == null) { return false; }
 
             string[] textureNames = BarTexturesManager.Instance.BarTextureNames.ToArray();
-            string[] drawModes = new string[] { "Stretch", "Repeat Horizontal", "Repeat Vertical", "Repeat" };
+            string[] drawModes = new string[] { 
+                LocalizationManager.Instance.Translate("Stretch"), 
+                LocalizationManager.Instance.Translate("Repeat Horizontal"), 
+                LocalizationManager.Instance.Translate("Repeat Vertical"), 
+                LocalizationManager.Instance.Translate("Repeat") 
+            };
 
-            if (ImGui.BeginChild("Bar Textures", new Vector2(800, 400), false, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+            if (ImGui.BeginChild(LocalizationManager.Instance.Translate("Bar Textures"), new Vector2(800, 400), false, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
             {
                 ImGuiHelper.NewLineAndTab();
-                ImGui.Text("Custom Bar Textures path");
+                ImGui.Text(LocalizationManager.Instance.Translate("Custom Bar Textures path"));
 
                 ImGuiHelper.Tab();
                 if (ImGui.InputText("", ref BarTexturesPath, 200, ImGuiInputTextFlags.EnterReturnsTrue))
@@ -87,15 +93,15 @@ namespace DelvUI.Interface.GeneralElements
                 ImGui.PopFont();
 
                 ImGuiHelper.NewLineAndTab();
-                ImGui.Text("Preview");
+                ImGui.Text(LocalizationManager.Instance.Translate("Preview"));
                 ImGuiHelper.Tab();
-                ImGui.Combo("Bar Texture ##bar texture", ref _inputBarTexture, textureNames);
+                ImGui.Combo(LocalizationManager.Instance.Translate("Bar Texture") + " ##bar texture", ref _inputBarTexture, textureNames);
 
                 ImGuiHelper.Tab();
-                ImGui.Combo("Draw Mode", ref _drawModeIndex, drawModes);
+                ImGui.Combo(LocalizationManager.Instance.Translate("Draw Mode"), ref _drawModeIndex, drawModes);
 
                 ImGuiHelper.Tab();
-                if (ImGui.ColorEdit4("Color", ref _color))
+                if (ImGui.ColorEdit4(LocalizationManager.Instance.Translate("Color"), ref _color))
                 {
                     _pluginConfigColor = new PluginConfigColor(_color);
                 }
@@ -120,7 +126,7 @@ namespace DelvUI.Interface.GeneralElements
 
                     ImGuiHelper.DrawSpacing(3);
                     ImGuiHelper.NewLineAndTab();
-                    if (ImGui.Button("Apply to all bars", new Vector2(200, 30)))
+                    if (ImGui.Button(LocalizationManager.Instance.Translate("Apply to all bars"), new Vector2(200, 30)))
                     {
                         _applying = true;
                     }
@@ -133,8 +139,13 @@ namespace DelvUI.Interface.GeneralElements
 
             if (_applying)
             {
-                string[] lines = new string[] { "This will replace the Bar Texture", "and Draw Mode for ALL bars!", "THIS CAN'T BE UNDONE!", "Are you sure?" };
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("Apply to ALL bars?", lines);
+                string[] lines = new string[] { 
+                    LocalizationManager.Instance.Translate("This will replace the Bar Texture"), 
+                    LocalizationManager.Instance.Translate("and Draw Mode for ALL bars!"), 
+                    LocalizationManager.Instance.Translate("THIS CAN'T BE UNDONE!"), 
+                    LocalizationManager.Instance.Translate("Are you sure?") 
+                };
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal(LocalizationManager.Instance.Translate("Apply to ALL bars?"), lines);
 
                 if (didConfirm)
                 {

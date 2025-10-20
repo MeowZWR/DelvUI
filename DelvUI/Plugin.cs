@@ -13,9 +13,11 @@ using DelvUI.Interface.GeneralElements;
 using DelvUI.Interface.Nameplates;
 using DelvUI.Interface.Party;
 using DelvUI.Interface.PartyCooldowns;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace DelvUI
@@ -145,14 +147,15 @@ namespace DelvUI
                 "/delvui",
                 new CommandInfo(PluginCommand)
                 {
-                    HelpMessage = "Opens the DelvUI configuration window.\n"
-                                + "/delvui toggle → Toggles HUD visibility.\n"
-                                + "/delvui show → Shows HUD.\n"
-                                + "/delvui hide → Hides HUD.\n"
-                                + "/delvui toggledefaulthud → Toggles the game's Job Gauges visibility.\n"
-                                + "/delvui forcejob <JOB> → Forces DelvUI to show the hud for the given Job short name.\n"
-                                + "/delvui profile <PROFILE> → Switch to the given profile.\n"
-                                + "/delvui mouse <on/off> → Toggles special input handling to support extra mouse buttons when hovering DelvUI elements.",
+                    HelpMessage = "打开 DelvUI 设置窗口。\n"
+                                + "/delvui toggle → 切换 HUD 显示/隐藏。\n"
+                                + "/delvui show → 显示 HUD。\n"
+                                + "/delvui hide → 隐藏 HUD。\n"
+                                + "/delvui toggledefaulthud → 切换游戏内职业量谱显示/隐藏。\n"
+                                + "/delvui forcejob <JOB> → 强制以指定职业短名显示 DelvUI HUD。\n"
+                                + "/delvui profile <PROFILE> → 切换到指定配置文件。\n"
+                                + "/delvui mouse <on/off> → 切换 DelvUI 元素上悬停时对多按键鼠标的支持。\n"
+                                + "/delvui extract → 输出翻译分析报告。",
 
                     ShowInHelp = true
                 }
@@ -162,14 +165,15 @@ namespace DelvUI
                 "/dui",
                 new CommandInfo(PluginCommand)
                 {
-                    HelpMessage = "Opens the DelvUI configuration window.\n"
-                                + "/dui toggle → Toggles HUD visibility.\n"
-                                + "/dui show → Shows HUD.\n"
-                                + "/dui hide → Hides HUD."
-                                + "/dui toggledefaulthud → Toggles the game's Job Gauges visibility.\n"
-                                + "/dui forcejob <JOB> → Forces DelvUI to show the hud for the given Job short name.\n"
-                                + "/dui profile <PROFILE> → Switch to the given profile.\n"
-                                + "/dui mouse <on/off> → Toggles special input handling to support extra mouse buttons when hovering DelvUI elements.",
+                    HelpMessage = "打开 DelvUI 设置窗口。\n"
+                                + "/dui toggle → 切换 HUD 显示/隐藏。\n"
+                                + "/dui show → 显示 HUD。\n"
+                                + "/dui hide → 隐藏 HUD。\n"
+                                + "/dui toggledefaulthud → 切换游戏内职业量谱显示/隐藏。\n"
+                                + "/dui forcejob <JOB> → 强制以指定职业短名显示 DelvUI HUD。\n"
+                                + "/dui profile <PROFILE> → 切换到指定配置文件。\n"
+                                + "/dui mouse <on/off> → 切换 DelvUI 元素上悬停时对多按键鼠标的支持。\n"
+                                + "/dui extract → 输出翻译分析报告。",
 
                     ShowInHelp = true
                 }
@@ -298,6 +302,11 @@ namespace DelvUI
 
                         break;
 
+                    case "extract":
+                    case "extracttext":
+                        ExtractConfigTexts();
+                        break;
+
                     default:
                         configManager.ToggleConfigWindow();
 
@@ -358,6 +367,37 @@ namespace DelvUI
         private void OpenConfigUi()
         {
             ConfigurationManager.Instance.ToggleConfigWindow();
+        }
+
+        private void ExtractConfigTexts()
+        {
+            try
+            {
+                Chat.Print("[DelvUI] 正在分析翻译状态...");
+                Logger.Info("开始分析翻译状态");
+
+                var extractor = new ConfigTextExtractor();
+                var result = extractor.AnalyzeTranslations();
+
+                // 导出到配置目录
+                string configDir = PluginInterface.GetPluginConfigDirectory();
+                string outputPath = Path.Combine(configDir, "translation_analysis.md");
+                extractor.ExportAnalysis(result, outputPath);
+
+                // 输出精简统计
+                Chat.Print($"[DelvUI] 翻译分析完成：");
+                Chat.Print($"[DelvUI]   需要: {result.RequiredKeys.Count}  已翻译: {result.TranslatedKeys.Count}");
+                Chat.Print($"[DelvUI]   未翻译: {result.UntranslatedKeys.Count}  未使用: {result.UnusedKeys.Count}");
+                Chat.Print($"[DelvUI]   重复键: {result.DuplicateKeys.Count}  覆盖率: {result.CoveragePercentage:F1}%");
+                Chat.Print($"[DelvUI] 详细报告: {outputPath}");
+
+                Logger.Info($"翻译分析完成: 未翻译 {result.UntranslatedKeys.Count} 个, 重复键 {result.DuplicateKeys.Count} 个");
+            }
+            catch (Exception e)
+            {
+                Chat.Print($"[DelvUI] 分析失败: {e.Message}");
+                Logger.Error($"分析翻译状态失败: {e.Message}\n{e.StackTrace}");
+            }
         }
 
         protected virtual void Dispose(bool disposing)

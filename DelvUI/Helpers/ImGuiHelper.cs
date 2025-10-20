@@ -272,7 +272,7 @@ namespace DelvUI.Helpers
 
                         if (formattedText.Length > 0)
                         {
-                            ImGui.SetTooltip("Example: " + formattedText);
+                            ImGui.SetTooltip("示例: " + formattedText);
                         }
                     }
                 }

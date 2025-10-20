@@ -3,6 +3,7 @@ using Dalamud.Interface.ImGuiFileDialog;
 using DelvUI.Config;
 using DelvUI.Config.Attributes;
 using DelvUI.Helpers;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using Newtonsoft.Json;
 using System;
@@ -216,12 +217,12 @@ namespace DelvUI.Interface.GeneralElements
                 if (_fonts.Length == 0)
                 {
                     ImGuiHelper.Tab();
-                    ImGui.Text("Default font not found in \"%appdata%/Roaming/XIVLauncher/InstalledPlugins/DelvUI/Media/Fonts/Expressway.ttf\"");
+                    ImGui.Text(LocalizationManager.Instance.Translate("Default font not found in \"%appdata%/Roaming/XIVLauncher/InstalledPlugins/DelvUI/Media/Fonts/Expressway.ttf\""));
                     return false;
                 }
 
                 ImGuiHelper.NewLineAndTab();
-                if (ImGui.InputText("Path", ref FontsPath, 200, ImGuiInputTextFlags.EnterReturnsTrue))
+                if (ImGui.InputText(LocalizationManager.Instance.Translate("Path"), ref FontsPath, 200, ImGuiInputTextFlags.EnterReturnsTrue))
                 {
                     changed = true;
                     ReloadFonts();
@@ -236,7 +237,7 @@ namespace DelvUI.Interface.GeneralElements
                 ImGui.PopFont();
 
                 ImGuiHelper.Tab();
-                ImGui.Combo("Font ##font", ref _inputFont, _fonts, 10);
+                ImGui.Combo(LocalizationManager.Instance.Translate("Font") + " ##font", ref _inputFont, _fonts, 10);
 
                 ImGui.SameLine();
                 ImGui.PushFont(UiBuilder.IconFont);
@@ -247,7 +248,7 @@ namespace DelvUI.Interface.GeneralElements
                 ImGui.PopFont();
 
                 ImGuiHelper.Tab();
-                ImGui.Combo("Size  ##size", ref _inputSize, _sizes, 10);
+                ImGui.Combo(LocalizationManager.Instance.Translate("Size") + "  ##size", ref _inputSize, _sizes, 10);
 
                 ImGui.SameLine();
                 ImGui.PushFont(UiBuilder.IconFont);
@@ -260,9 +261,9 @@ namespace DelvUI.Interface.GeneralElements
                 ImGuiHelper.NewLineAndTab();
                 if (ImGui.BeginTable("table", 3, flags, new Vector2(326, 300)))
                 {
-                    ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch, 0, 0);
-                    ImGui.TableSetupColumn("Size", ImGuiTableColumnFlags.WidthFixed, 0, 1);
-                    ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, 0, 2);
+                    ImGui.TableSetupColumn(LocalizationManager.Instance.Translate("Name"), ImGuiTableColumnFlags.WidthStretch, 0, 0);
+                    ImGui.TableSetupColumn(LocalizationManager.Instance.Translate("Size"), ImGuiTableColumnFlags.WidthFixed, 0, 1);
+                    ImGui.TableSetupColumn(LocalizationManager.Instance.Translate("Actions"), ImGuiTableColumnFlags.WidthFixed, 0, 2);
 
                     ImGui.TableSetupScrollFreeze(0, 1);
                     ImGui.TableHeadersRow();
@@ -319,21 +320,21 @@ namespace DelvUI.Interface.GeneralElements
                 }
 
                 ImGuiHelper.NewLineAndTab();
-                if (ImGui.Checkbox("Support Chinese", ref SupportChineseCharacters))
+                if (ImGui.Checkbox(LocalizationManager.Instance.Translate("Support Chinese"), ref SupportChineseCharacters))
                 {
                     changed = true;
                     FontsManager.Instance.BuildFonts();
                 }
 
                 ImGui.SameLine();
-                if (ImGui.Checkbox("Support Korean", ref SupportKoreanCharacters))
+                if (ImGui.Checkbox(LocalizationManager.Instance.Translate("Support Korean"), ref SupportKoreanCharacters))
                 {
                     changed = true;
                     FontsManager.Instance.BuildFonts();
                 }
 
                 ImGui.SameLine();
-                if (ImGui.Checkbox("Support Cyrillic", ref SupportCyrillicCharacters))
+                if (ImGui.Checkbox(LocalizationManager.Instance.Translate("Support Cyrillic"), ref SupportCyrillicCharacters))
                 {
                     changed = true;
                     FontsManager.Instance.BuildFonts();
@@ -343,8 +344,11 @@ namespace DelvUI.Interface.GeneralElements
             // apply confirmation
             if (_applyingIndex >= 0)
             {
-                string[] lines = new string[] { "Are you sure you want to apply this font", "to all labels using a font with the same size?" };
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("Apply to all labels?", lines);
+                string[] lines = new string[] { 
+                    LocalizationManager.Instance.Translate("Are you sure you want to apply this font"), 
+                    LocalizationManager.Instance.Translate("to all labels using a font with the same size?") 
+                };
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal(LocalizationManager.Instance.Translate("Apply to all labels?"), lines);
 
                 if (didConfirm)
                 {

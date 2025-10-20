@@ -1,4 +1,5 @@
 ﻿using DelvUI.Config.Attributes;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using System;
 using System.IO;
@@ -52,25 +53,27 @@ namespace DelvUI.Config.Tree
                 {
                     foreach (SubSectionNode subSectionNode in _children)
                     {
+                        string displayName = LocalizationManager.Instance.Translate(subSectionNode.Name);
+                        
                         if (ForceSelectedTabName != null)
                         {
                             bool a = subSectionNode.Name == ForceSelectedTabName; // no idea how this works
                             ImGuiTabItemFlags flag = subSectionNode.Name == ForceSelectedTabName ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None;
 
-                            if (!ImGui.BeginTabItem(subSectionNode.Name, ref a, flag))
+                            if (!ImGui.BeginTabItem(displayName, ref a, flag))
                             {
                                 continue;
                             }
                         }
                         else
                         {
-                            if (!ImGui.BeginTabItem(subSectionNode.Name))
+                            if (!ImGui.BeginTabItem(displayName))
                             {
                                 continue;
                             }
                         }
 
-                        DrawExportResetContextMenu(subSectionNode, subSectionNode.Name);
+                        DrawExportResetContextMenu(subSectionNode, displayName);
 
                         ImGui.BeginChild("subconfig value", new Vector2(0, 0), true);
                         didReset |= subSectionNode.Draw(ref changed);

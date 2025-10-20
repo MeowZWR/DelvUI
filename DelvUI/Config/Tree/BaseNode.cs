@@ -4,6 +4,7 @@ using Dalamud.Interface.Textures.TextureWraps;
 using Dalamud.Interface.Utility;
 using DelvUI.Config.Attributes;
 using DelvUI.Helpers;
+using DelvUI.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -215,7 +216,8 @@ namespace DelvUI.Config.Tree
 
                         foreach (SectionNode selectionNode in _nodes)
                         {
-                            if (ImGui.Selectable(selectionNode.Name, selectionNode.Selected))
+                            string displayName = LocalizationManager.Instance.Translate(selectionNode.Name);
+                            if (ImGui.Selectable(displayName, selectionNode.Selected))
                             {
                                 selectionNode.Selected = true;
                                 SelectedOptionName = selectionNode.Name;
@@ -226,7 +228,7 @@ namespace DelvUI.Config.Tree
                                 }
                             }
 
-                            DrawExportResetContextMenu(selectionNode, selectionNode.Name);
+                            DrawExportResetContextMenu(selectionNode, displayName);
                         }
 
                         // changelog button
@@ -240,7 +242,7 @@ namespace DelvUI.Config.Tree
                         }
                         ImGui.PopStyleColor();
                         ImGui.PopFont();
-                        ImGuiHelper.SetTooltip("Changelog");
+                        ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("Changelog"));
 
                         // discord button
                         ImGui.PushFont(UiBuilder.IconFont);
@@ -253,7 +255,7 @@ namespace DelvUI.Config.Tree
                         }
                         ImGui.PopStyleColor(2);
                         ImGui.PopFont();
-                        ImGuiHelper.SetTooltip("DelvUI Discord");
+                        ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("DelvUI Discord"));
 
                         // discord button
                         ImGui.PushFont(UiBuilder.IconFont);
@@ -266,7 +268,7 @@ namespace DelvUI.Config.Tree
                         }
                         ImGui.PopStyleColor(2);
                         ImGui.PopFont();
-                        ImGuiHelper.SetTooltip("Tip the developer at ko-fi.com");
+                        ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("Tip the developer at ko-fi.com"));
                     }
 
                     ImGui.EndChild();
@@ -302,7 +304,7 @@ namespace DelvUI.Config.Tree
             }
             ImGui.PopStyleColor();
             ImGui.PopFont();
-            ImGuiHelper.SetTooltip("Close");
+            ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("Close"));
 
             // unlock button
             ImGui.PushFont(UiBuilder.IconFont);
@@ -315,7 +317,7 @@ namespace DelvUI.Config.Tree
             }
             ImGui.PopStyleColor();
             ImGui.PopFont();
-            ImGuiHelper.SetTooltip("Unlock HUD");
+            ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("Unlock HUD"));
 
             // hide button
             ImGui.PushFont(UiBuilder.IconFont);
@@ -328,7 +330,7 @@ namespace DelvUI.Config.Tree
             }
             ImGui.PopStyleColor();
             ImGui.PopFont();
-            ImGuiHelper.SetTooltip(ConfigurationManager.Instance.ShowHUD ? "Hide HUD" : "Show HUD");
+            ImGuiHelper.SetTooltip(ConfigurationManager.Instance.ShowHUD ? LocalizationManager.Instance.Translate("Hide HUD") : LocalizationManager.Instance.Translate("Show HUD"));
 
             PopStyles(popColors);
 

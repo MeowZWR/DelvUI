@@ -1,6 +1,7 @@
 ﻿using DelvUI.Config;
 using DelvUI.Config.Attributes;
 using DelvUI.Helpers;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 
 namespace DelvUI.Interface.GeneralElements
@@ -37,7 +38,7 @@ namespace DelvUI.Interface.GeneralElements
         {
             ImGuiHelper.NewLineAndTab();
 
-            if (ImGui.Checkbox("Enabled", ref Enabled))
+            if (ImGui.Checkbox(LocalizationManager.Instance.Translate("Enabled"), ref Enabled))
             {
                 if (Enabled)
                 {
@@ -53,8 +54,12 @@ namespace DelvUI.Interface.GeneralElements
             // confirmation dialog
             if (_showConfirmationDialog)
             {
-                string[] lines = new string[] { "THIS FEATURE IS KNOWN TO CAUSE RANDOM", "CRASHES TO A SMALL PORTION OF USERS!!!", "Are you sure you want to enable it?" };
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("WARNING!", lines);
+                string[] lines = new string[] { 
+                    LocalizationManager.Instance.Translate("THIS FEATURE IS KNOWN TO CAUSE RANDOM"), 
+                    LocalizationManager.Instance.Translate("CRASHES TO A SMALL PORTION OF USERS!!!"), 
+                    LocalizationManager.Instance.Translate("Are you sure you want to enable it?") 
+                };
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal(LocalizationManager.Instance.Translate("WARNING!"), lines);
 
                 if (didConfirm)
                 {
@@ -73,22 +78,22 @@ namespace DelvUI.Interface.GeneralElements
             // mode
             ImGuiHelper.NewLineAndTab();
             ImGui.SameLine();
-            ImGui.Text("Mode: ");
+            ImGui.Text(LocalizationManager.Instance.Translate("Mode: "));
 
             ImGui.SameLine();
-            if (ImGui.RadioButton("Full", Mode == WindowClippingMode.Full))
+            if (ImGui.RadioButton(LocalizationManager.Instance.Translate("Full"), Mode == WindowClippingMode.Full))
             {
                 Mode = WindowClippingMode.Full;
             }
 
             ImGui.SameLine();
-            if (ImGui.RadioButton("Hide", Mode == WindowClippingMode.Hide))
+            if (ImGui.RadioButton(LocalizationManager.Instance.Translate("Hide"), Mode == WindowClippingMode.Hide))
             {
                 Mode = WindowClippingMode.Hide;
             }
 
             ImGui.SameLine();
-            if (ImGui.RadioButton("Performance", Mode == WindowClippingMode.Performance))
+            if (ImGui.RadioButton(LocalizationManager.Instance.Translate("Performance"), Mode == WindowClippingMode.Performance))
             {
                 Mode = WindowClippingMode.Performance;
             }
@@ -96,31 +101,31 @@ namespace DelvUI.Interface.GeneralElements
             // nameplates
             ImGui.NewLine();
             ImGuiHelper.NewLineAndTab();
-            changed |= ImGui.Checkbox("Enable special clipping for Nameplates", ref NameplatesClipRectsEnabled);
-            ImGuiHelper.SetTooltip("When enabled, Nameplates will get covered by game UI elements that wouldn't normally cover DelvUI elements.");
+            changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("Enable special clipping for Nameplates"), ref NameplatesClipRectsEnabled);
+            ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("When enabled, Nameplates will get covered by game UI elements that wouldn't normally cover DelvUI elements."));
 
             if (NameplatesClipRectsEnabled)
             {
                 ImGuiHelper.Tab(); ImGuiHelper.Tab();
-                changed |= ImGui.Checkbox("Default Target Castbar", ref TargetCastbarClipRectEnabled);
-                ImGuiHelper.SetTooltip("When enabled, the game's target castbar will not be covered by DelvUI Nameplates.\nFor players that prefer to use the default target cast bar over DelvUI's.");
+                changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("Default Target Castbar"), ref TargetCastbarClipRectEnabled);
+                ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("When enabled, the game's target castbar will not be covered by DelvUI Nameplates.\nFor players that prefer to use the default target cast bar over DelvUI's."));
 
                 ImGuiHelper.Tab(); ImGuiHelper.Tab();
-                changed |= ImGui.Checkbox("Hotbars", ref HotbarsClipRectsEnabled);
-                ImGuiHelper.SetTooltip("When enabled, active hotbar will not be covered by DelvUI Nameplates.\nNote that the way this is calculated is not perfect and it might not work well for hotbars that have empty slots.");
+                changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("Hotbars"), ref HotbarsClipRectsEnabled);
+                ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("When enabled, active hotbar will not be covered by DelvUI Nameplates.\nNote that the way this is calculated is not perfect and it might not work well for hotbars that have empty slots."));
 
                 ImGuiHelper.Tab(); ImGuiHelper.Tab();
-                changed |= ImGui.Checkbox("NPC Chat Bubbles", ref ChatBubblesNPCClipRectsEnabled);
+                changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("NPC Chat Bubbles"), ref ChatBubblesNPCClipRectsEnabled);
 
                 ImGuiHelper.Tab(); ImGuiHelper.Tab();
-                changed |= ImGui.Checkbox("Player Chat Bubbles", ref ChatBubblesPlayersClipRectsEnabled);
+                changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("Player Chat Bubbles"), ref ChatBubblesPlayersClipRectsEnabled);
             }
 
             // third party
             ImGui.NewLine();
             ImGuiHelper.NewLineAndTab();
-            changed |= ImGui.Checkbox("Enable clipping for other plugins", ref ThirdPartyClipRectsEnabled);
-            ImGuiHelper.SetTooltip("When enabled, other plugins' windows can also be clipped so DelvUI elements don't cover them.\nPlease note that this requires the developer of each third party plugin to implement the feature.");
+            changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("Enable clipping for other plugins"), ref ThirdPartyClipRectsEnabled);
+            ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("When enabled, other plugins' windows can also be clipped so DelvUI elements don't cover them.\nPlease note that this requires the developer of each third party plugin to implement the feature."));
 
             // text
             ImGui.NewLine();
@@ -130,20 +135,20 @@ namespace DelvUI.Interface.GeneralElements
             switch (Mode)
             {
                 case WindowClippingMode.Full:
-                    ImGui.Text("DelvUI will attempt to not cover game windows in this mode by clipping around them.");
+                    ImGui.Text(LocalizationManager.Instance.Translate("DelvUI will attempt to not cover game windows in this mode by clipping around them."));
                     break;
 
                 case WindowClippingMode.Hide:
-                    ImGui.Text("DelvUI will attempt to not cover game windows in this mode by not drawing an element if its touching a game window.");
+                    ImGui.Text(LocalizationManager.Instance.Translate("DelvUI will attempt to not cover game windows in this mode by not drawing an element if its touching a game window."));
                     break;
 
                 case WindowClippingMode.Performance:
-                    ImGui.Text("Window Clipping functionality will be reduced in favor of performance.\nOnly one game window will be clipped at a time. This might yield unexpected / ugly results.\n\nNote: This mode won't work well with Nameplates.");
+                    ImGui.Text(LocalizationManager.Instance.Translate("Window Clipping functionality will be reduced in favor of performance.\nOnly one game window will be clipped at a time. This might yield unexpected / ugly results.\n\nNote: This mode won't work well with Nameplates."));
                     break;
             }
 
             ImGuiHelper.NewLineAndTab();
-            ImGui.Text("If you're experiencing random crashes or bad performance, we recommend you try a different mode\nor disable Window Clipping altogether");
+            ImGui.Text(LocalizationManager.Instance.Translate("If you're experiencing random crashes or bad performance, we recommend you try a different mode\nor disable Window Clipping altogether"));
 
             return false;
         }

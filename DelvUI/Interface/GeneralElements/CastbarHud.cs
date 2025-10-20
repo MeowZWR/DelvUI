@@ -6,6 +6,7 @@ using DelvUI.Enums;
 using DelvUI.Helpers;
 using DelvUI.Interface.Bars;
 using DelvUI.Interface.EnemyList;
+using DelvUI.Localization;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using Dalamud.Bindings.ImGui;
@@ -130,7 +131,7 @@ namespace DelvUI.Interface.GeneralElements
 
             string original = LastUsedCast?.ActionText ?? "";
             string? castName = EncryptedStringsHelper.GetString(original).CheckForUpperCase();
-            Config.CastNameLabel.SetText(Config.Preview ? "Cast Name" : castName ?? "");
+            Config.CastNameLabel.SetText(Config.Preview ? LocalizationManager.Instance.Translate("Cast Name") : castName ?? "");
 
             AddDrawAction(Config.CastNameLabel.StrataLevel, () =>
             {

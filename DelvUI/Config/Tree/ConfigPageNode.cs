@@ -3,6 +3,7 @@ using DelvUI.Config.Attributes;
 using DelvUI.Config.Profiles;
 using DelvUI.Helpers;
 using DelvUI.Interface;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using Newtonsoft.Json;
 using System;
@@ -60,7 +61,7 @@ namespace DelvUI.Config.Tree
 
                     ConfigPageNode configPageNode = new();
                     configPageNode.ConfigObject = nestedConfig;
-                    configPageNode.Name = nestedConfigAttribute.friendlyName;
+                    configPageNode.Name = LocalizationManager.Instance.Translate(nestedConfigAttribute.friendlyName);
 
                     if (nestedConfig.Disableable)
                     {
@@ -211,7 +212,7 @@ namespace DelvUI.Config.Tree
             float width = ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X;
             ImGui.SetCursorPos(new Vector2(width / 2f - buttonWidth - 5, ImGui.GetCursorPosY()));
 
-            if (ImGui.Button("Export", new Vector2(120, 24)))
+            if (ImGui.Button(LocalizationManager.Instance.Translate("Export"), new Vector2(120, 24)))
             {
                 var exportString = ImportExportHelper.GenerateExportString(ConfigObject);
                 ImGui.SetClipboardText(exportString);
@@ -219,7 +220,7 @@ namespace DelvUI.Config.Tree
 
             ImGui.SameLine();
 
-            if (ImGui.Button("Reset", new Vector2(120, 24)))
+            if (ImGui.Button(LocalizationManager.Instance.Translate("Reset"), new Vector2(120, 24)))
             {
                 _nodeToReset = this;
                 _nodeToResetName = Utils.UserFriendlyConfigName(ConfigObject.GetType().Name);

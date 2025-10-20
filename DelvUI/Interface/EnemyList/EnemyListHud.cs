@@ -6,6 +6,7 @@ using DelvUI.Helpers;
 using DelvUI.Interface.Bars;
 using DelvUI.Interface.GeneralElements;
 using DelvUI.Interface.StatusEffects;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using System;
 using System.Collections.Generic;
@@ -256,7 +257,7 @@ namespace DelvUI.Interface.EnemyList
                 }
 
                 // labels
-                string? name = Config.Preview ? "Fake Name" : null;
+                string? name = Config.Preview ? LocalizationManager.Instance.Translate("Fake Name") : null;
                 AddDrawAction(Configs.HealthBar.NameLabel.StrataLevel, () =>
                 {
                     _nameLabelHud.Draw(origin + pos, Configs.HealthBar.Size, character, name, currentHp, maxHp);

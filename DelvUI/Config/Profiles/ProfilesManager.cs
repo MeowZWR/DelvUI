@@ -6,6 +6,7 @@ using DelvUI.Config.Attributes;
 using DelvUI.Config.Tree;
 using DelvUI.Helpers;
 using DelvUI.Interface;
+using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
 using Newtonsoft.Json;
 using System;
@@ -688,7 +689,7 @@ namespace DelvUI.Config.Profiles
 
                 ImGui.PushItemWidth(408);
                 ImGuiHelper.NewLineAndTab();
-                if (ImGui.Combo("Active Profile", ref _selectedProfileIndex, profiles, 10))
+                if (ImGui.Combo(LocalizationManager.Instance.Translate("Active Profile"), ref _selectedProfileIndex, profiles, 10))
                 {
                     string newProfileName = profiles[_selectedProfileIndex];
 
@@ -706,7 +707,7 @@ namespace DelvUI.Config.Profiles
                     _resetingProfileName = _currentProfileName;
                 }
                 ImGui.PopFont();
-                ImGuiHelper.SetTooltip("Reset");
+                ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("Reset"));
 
                 if (_currentProfileName != DefaultProfileName)
                 {
@@ -718,7 +719,7 @@ namespace DelvUI.Config.Profiles
                         _renamingProfileName = _currentProfileName;
                     }
                     ImGui.PopFont();
-                    ImGuiHelper.SetTooltip("Rename");
+                    ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("Rename"));
 
                     // delete
                     ImGui.SameLine();
@@ -728,13 +729,13 @@ namespace DelvUI.Config.Profiles
                         _deletingProfileName = _currentProfileName;
                     }
                     ImGui.PopFont();
-                    ImGuiHelper.SetTooltip("Delete");
+                    ImGuiHelper.SetTooltip(LocalizationManager.Instance.Translate("Delete"));
                 }
 
                 // export to string
                 ImGuiHelper.Tab();
                 ImGui.SameLine();
-                if (ImGui.Button("Export to Clipboard", new Vector2(200, 0)))
+                if (ImGui.Button(LocalizationManager.Instance.Translate("Export to Clipboard"), new Vector2(200, 0)))
                 {
                     string? exportString = ConfigurationManager.Instance.ExportCurrentConfigs();
                     if (exportString != null)
@@ -747,12 +748,12 @@ namespace DelvUI.Config.Profiles
                 // export success popup
                 if (ImGui.BeginPopup("export_succes_popup"))
                 {
-                    ImGui.Text("Profile export string copied to clipboard!");
+                    ImGui.Text(LocalizationManager.Instance.Translate("Profile export string copied to clipboard!"));
                     ImGui.EndPopup();
                 }
 
                 ImGui.SameLine();
-                if (ImGui.Button("Export to File", new Vector2(200, 0)))
+                if (ImGui.Button(LocalizationManager.Instance.Translate("Export to File"), new Vector2(200, 0)))
                 {
                     ExportToFile(_currentProfileName);
                 }
@@ -765,18 +766,18 @@ namespace DelvUI.Config.Profiles
 
                 ImGuiHelper.DrawSeparator(1, 1);
                 ImGuiHelper.Tab();
-                ImGui.Text("Create a new profile:");
+                ImGui.Text(LocalizationManager.Instance.Translate("Create a new profile:"));
 
                 ImGuiHelper.Tab();
                 ImGui.PushItemWidth(408);
-                ImGui.InputText("Profile Name", ref _newProfileName, 200);
+                ImGui.InputText(LocalizationManager.Instance.Translate("Profile Name"), ref _newProfileName, 200);
 
                 ImGuiHelper.Tab();
                 ImGui.PushItemWidth(200);
                 ImGui.Combo("", ref _copyFromIndex, profiles, 10);
 
                 ImGui.SameLine();
-                if (ImGui.Button("Copy", new Vector2(200, 0)))
+                if (ImGui.Button(LocalizationManager.Instance.Translate("Copy"), new Vector2(200, 0)))
                 {
                     _newProfileName = _newProfileName.Trim();
                     if (_newProfileName.Length == 0)
@@ -796,7 +797,7 @@ namespace DelvUI.Config.Profiles
                 }
 
                 ImGuiHelper.NewLineAndTab();
-                if (ImGui.Button("Import From Clipboard", new Vector2(200, 0)))
+                if (ImGui.Button(LocalizationManager.Instance.Translate("Import From Clipboard"), new Vector2(200, 0)))
                 {
                     _newProfileName = _newProfileName.Trim();
                     if (_newProfileName.Length == 0)
@@ -815,7 +816,7 @@ namespace DelvUI.Config.Profiles
                 }
 
                 ImGui.SameLine();
-                if (ImGui.Button("Import From File", new Vector2(200, 0)))
+                if (ImGui.Button(LocalizationManager.Instance.Translate("Import From File"), new Vector2(200, 0)))
                 {
                     _newProfileName = _newProfileName.Trim();
                     if (_newProfileName.Length == 0)
@@ -831,7 +832,7 @@ namespace DelvUI.Config.Profiles
                 // no name popup
                 if (ImGui.BeginPopup("import_error_popup"))
                 {
-                    ImGui.Text("Please type a name for the new profile!");
+                    ImGui.Text(LocalizationManager.Instance.Translate("Please type a name for the new profile!"));
                     ImGui.EndPopup();
                 }
             }
@@ -850,8 +851,8 @@ namespace DelvUI.Config.Profiles
             // delete confirmation
             if (_deletingProfileName != null)
             {
-                string[] lines = new string[] { "Are you sure you want to delete the profile:", "  - " + _deletingProfileName };
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("Delete?", lines);
+                string[] lines = new string[] { LocalizationManager.Instance.Translate("Are you sure you want to delete the profile:"), "  - " + _deletingProfileName };
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal(LocalizationManager.Instance.Translate("Delete?"), lines);
 
                 if (didConfirm)
                 {
@@ -868,8 +869,8 @@ namespace DelvUI.Config.Profiles
             // reset confirmation
             if (_resetingProfileName != null)
             {
-                string[] lines = new string[] { "Are you sure you want to reset the profile:", "  - " + _resetingProfileName };
-                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal("Reset?", lines);
+                string[] lines = new string[] { LocalizationManager.Instance.Translate("Are you sure you want to reset the profile:"), "  - " + _resetingProfileName };
+                var (didConfirm, didClose) = ImGuiHelper.DrawConfirmationModal(LocalizationManager.Instance.Translate("Reset?"), lines);
 
                 if (didConfirm)
                 {
@@ -888,7 +889,7 @@ namespace DelvUI.Config.Profiles
             // rename modal
             if (_renamingProfileName != null)
             {
-                var (didConfirm, didClose) = ImGuiHelper.DrawInputModal("Rename", "Type a new name for the profile:", ref _renamingProfileName);
+                var (didConfirm, didClose) = ImGuiHelper.DrawInputModal(LocalizationManager.Instance.Translate("Rename"), LocalizationManager.Instance.Translate("Type a new name for the profile:"), ref _renamingProfileName);
 
                 if (didConfirm)
                 {
@@ -912,7 +913,7 @@ namespace DelvUI.Config.Profiles
         {
             Profile profile = CurrentProfile();
 
-            changed |= ImGui.Checkbox("Auto-Switch For Specific Jobs", ref profile.AutoSwitchEnabled);
+            changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("Auto-Switch For Specific Jobs"), ref profile.AutoSwitchEnabled);
 
             if (!profile.AutoSwitchEnabled)
             {
@@ -972,7 +973,7 @@ namespace DelvUI.Config.Profiles
         {
             Profile profile = CurrentProfile();
 
-            changed |= ImGui.Checkbox("Attach HUD Layout to this profile", ref profile.AttachHudEnabled);
+            changed |= ImGui.Checkbox(LocalizationManager.Instance.Translate("Attach HUD Layout to this profile"), ref profile.AttachHudEnabled);
 
             if (!profile.AttachHudEnabled)
             {

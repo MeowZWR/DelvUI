@@ -33,21 +33,21 @@ namespace DelvUI.Interface
         [ManualDraw]
         public bool Draw(ref bool changed)
         {
-            ImGui.Text("Import string:");
+            ImGui.Text("导入字符串：");
 
             ImGui.InputText("", ref _importString, 999999);
 
-            ImGui.Text("Here you can import specific parts of a profile.\nIf the string contains more than one part you will be able to select which parts you wish to import.");
+            ImGui.Text("您可以在此导入配置文件的特定部分。\n如果字符串中包含多个配置部分，您可以选择需要导入的部分。");
 
-            if (ImGui.Button("Import", new Vector2(560, 24)))
+            if (ImGui.Button("导入", new Vector2(560, 24)))
             {
                 _importing = _importString.Length > 0;
             }
 
             ImGuiHelper.DrawSeparator(1, 1);
-            ImGui.Text("To browse presets made by users of the DelvUI community join our Discord and find the #profiles channel.");
+            ImGui.Text("若想浏览 DelvUI 社区用户分享的预设，请加入我们的 Discord，在 #profiles 频道获取。");
 
-            if (ImGui.Button("DelvUI Discord", new Vector2(560, 24)))
+            if (ImGui.Button("加入 DelvUI Discord", new Vector2(560, 24)))
             {
                 Utils.OpenUrl("https://discord.gg/xzde5qQayh");
             }
