@@ -1,3 +1,6 @@
+# 2.5.1.2
+- 汉化
+
 # 2.5.1.1
 - Fixed Hotbars visibility.
 - Fixed enemy list cast bars.
