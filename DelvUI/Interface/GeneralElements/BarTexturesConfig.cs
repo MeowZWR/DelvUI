@@ -8,7 +8,6 @@ using DelvUI.Helpers;
 using DelvUI.Interface.Bars;
 using DelvUI.Localization;
 using Dalamud.Bindings.ImGui;
-using ImGuiScene;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

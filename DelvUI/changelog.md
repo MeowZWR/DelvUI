@@ -1,5 +1,5 @@
 # 2.5.1.2
-- 汉化
+- Added support for Patch 7.4 and Dalamud API 14.
 
 # 2.5.1.1
 - Fixed Hotbars visibility.
