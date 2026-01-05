@@ -1,6 +1,8 @@
-﻿using Dalamud.Game.ClientState.Objects.Enums;
+﻿using Dalamud.Bindings.ImGui;
+using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.Textures.TextureWraps;
+using Dalamud.Utility;
 using DelvUI.Config;
 using DelvUI.Enums;
 using DelvUI.Helpers;
@@ -9,7 +11,8 @@ using DelvUI.Interface.EnemyList;
 using DelvUI.Localization;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
-using Dalamud.Bindings.ImGui;
+using FFXIVClientStructs.FFXIV.Client.UI;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -125,19 +128,6 @@ namespace DelvUI.Interface.GeneralElements
                 });
             }
 
-            // cast name
-            bool isNameLeftAnchored = Config.CastNameLabel.TextAnchor is DrawAnchor.Left or DrawAnchor.TopLeft or DrawAnchor.BottomLeft;
-            Vector2 namePos = Config.ShowIcon && isNameLeftAnchored ? startPos + new Vector2(iconSize.X, 0) : startPos;
-
-            string original = LastUsedCast?.ActionText ?? "";
-            string? castName = EncryptedStringsHelper.GetString(original).CheckForUpperCase();
-            Config.CastNameLabel.SetText(Config.Preview ? LocalizationManager.Instance.Translate("Cast Name") : castName ?? "");
-
-            AddDrawAction(Config.CastNameLabel.StrataLevel, () =>
-            {
-                _castNameLabel.Draw(namePos, size, Actor);
-            });
-
             // cast time
             bool isTimeLeftAnchored = Config.CastTimeLabel.TextAnchor is DrawAnchor.Left or DrawAnchor.TopLeft or DrawAnchor.BottomLeft;
             Vector2 timePos = Config.ShowIcon && isTimeLeftAnchored ? startPos + new Vector2(iconSize.X, 0) : startPos;
@@ -160,6 +150,25 @@ namespace DelvUI.Interface.GeneralElements
             AddDrawAction(Config.CastTimeLabel.StrataLevel, () =>
             {
                 _castTimeLabel.Draw(timePos, size, Actor);
+            });
+
+            // cast name
+            bool isNameLeftAnchored = Config.CastNameLabel.TextAnchor is DrawAnchor.Left or DrawAnchor.TopLeft or DrawAnchor.BottomLeft;
+            Vector2 namePos = Config.ShowIcon && isNameLeftAnchored ? startPos + new Vector2(iconSize.X, 0) : startPos;
+
+            string original = CustomCastName() ?? (LastUsedCast?.ActionText ?? "");
+            string castName = EncryptedStringsHelper.GetString(original).CheckForUpperCase() ?? original;
+
+            if (Config.TruncateCastName)
+            {
+                castName = TruncatedCastName(castName) ?? castName;
+            }
+
+            Config.CastNameLabel.SetText(Config.Preview ? LocalizationManager.Instance.Translate("Cast Name") : castName);
+
+            AddDrawAction(Config.CastNameLabel.StrataLevel, () =>
+            {
+                _castNameLabel.Draw(namePos, size, Actor);
             });
         }
 
@@ -212,9 +221,56 @@ namespace DelvUI.Interface.GeneralElements
             }
         }
 
+        private string? TruncatedCastName(string text)
+        {
+            if (text.Length <= 5)
+            {
+                return null;
+            }
+
+            LabelConfig castNamelabel = Config.CastNameLabel;
+            LabelConfig castTimeLabel = Config.CastTimeLabel;
+
+
+            Vector2 size;
+
+            using (FontsManager.Instance.PushFont(castNamelabel.FontID))
+            {
+                size = ImGui.CalcTextSize(text) * castNamelabel.GetFontScale();
+            }
+
+            float maxWidth = Config.Size.X;
+
+            if (!Config.SeparateIcon)
+            {
+                maxWidth -= Config.Size.Y;
+            }
+
+            if (Config.CastTimeLabel.Enabled)
+            {
+                using (FontsManager.Instance.PushFont(Config.CastTimeLabel.FontID))
+                {
+                    maxWidth -= (ImGui.CalcTextSize("XX.X") * castTimeLabel.GetFontScale()).X;
+                }
+            }
+
+            if (size.X > maxWidth)
+            {
+                return TruncatedCastName(text.Substring(0, text.Length - 5) + "...");
+            }
+
+            return text;
+        }
+
         public virtual void AddExtras(BarHud bar, float totalCastTime, IDalamudTextureWrap? iconTexture)
         {
             // override
+        }
+
+        public virtual string? CustomCastName()
+        {
+            // override
+            return null;
         }
 
         public virtual PluginConfigColor GetColor() => Config.FillColor;
@@ -230,6 +286,17 @@ namespace DelvUI.Interface.GeneralElements
         public PlayerCastbarHud(PlayerCastbarConfig config, string displayName) : base(config, displayName)
         {
 
+        }
+
+        public override unsafe string? CustomCastName()
+        {
+            AddonCastBar* castBar = (AddonCastBar*)Plugin.GameGui.GetAddonByName("_CastBar", 1).Address;
+            if (castBar == null) { return null; }
+
+            AtkTextNode* node = castBar->GetTextNodeById(4);
+            if (node == null) { return null; }
+
+            return node->GetText().ExtractText();
         }
 
         public override void AddExtras(BarHud bar, float totalCastTime, IDalamudTextureWrap? iconTexture)

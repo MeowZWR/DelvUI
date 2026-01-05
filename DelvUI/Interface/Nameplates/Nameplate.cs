@@ -19,6 +19,7 @@ namespace DelvUI.Interface.Nameplates
     public class Nameplate
     {
         protected NameplateConfig _config;
+        public bool Enabled => _config.Enabled;
 
         protected LabelHud _nameLabelHud;
         protected LabelHud _titleLabelHud;
@@ -545,15 +546,14 @@ namespace DelvUI.Interface.Nameplates
             if (config.UseStateColor)
             {
                 StructsCharacter* chara = (StructsCharacter*)character.Address;
+                byte nameplateColorId = chara->GetNamePlateColorType();
 
-                bool inCombat = (character.StatusFlags & StatusFlags.InCombat) != 0;
-                if (inCombat && !config.ColorByHealth.Enabled)
-                {
-                    return config.InCombatColor;
-                }
-                else if (!inCombat)
-                {
-                    return (character.StatusFlags & StatusFlags.Hostile) != 0 ? config.OutOfCombatHostileColor : config.OutOfCombatColor;
+                switch (nameplateColorId) {
+                    case 7: return (character.StatusFlags & StatusFlags.Hostile) != 0 ? config.UnengagedHostileColor : config.UnengagedColor;
+                    case 9: return config.EngagedColor;
+                    case 10: return config.ClaimedColor;
+                    case 11: return config.UnclaimedColor;
+                    default: break;
                 }
             }
 

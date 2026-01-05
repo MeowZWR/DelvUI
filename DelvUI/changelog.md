@@ -1,3 +1,24 @@
+# 2.6.2.1
+- Re-added the unengaged color for hostile enemies in the nameplates settings.
+
+# 2.6.2.0
+- Updated Enemy Nameplates state colors so they behave the same way as the default nameplates:
+  * Added Engaged, Unengaged, Claimed and Unclaimed colors for enemy nameplates.
+  * Some of the older settings were removed, you might need to tinker with the new colors in `Nameplates > Enemies > Health Bar`.
+
+- New attempt to fix the cursor sometimes getting stuck (specifically with `/delvui mouse on`).
+
+# 2.6.1.1
+- Fixed a bug introduced in the last version with some item cast names.
+
+# 2.6.1.0
+- Added new features for Cast Bars:
+  * Added a "Truncate Cast Name" setting that will attempt to truncate the current cast name if the text wouldn't fit inside the bar.
+  * Made the player cast bar replicate the exact cast name shown by the default UI. This will reflect changes that other plugins might make to your casts, like VanillaPlus' "Cast Bar Aetheryte Names" feature.
+  
+- Added "Brotherhood Extra Chakra Color" setting for Monk's Chakra bar.
+- Added "Bloodfest Extra Cartridges Color" setting for Gunbreaker's Powder Gauge bar.
+
 # 2.6.0.0
 - Added support for Patch 7.4 and Dalamud API 14.
 
