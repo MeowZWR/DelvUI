@@ -1777,6 +1777,18 @@ namespace DelvUI.Localization
             AddTranslation("Path", "路径", "Path");
             AddTranslation("Actions", "操作", "Actions");
             
+            // 2.6.0.2 ~ 2.6.2.1
+            AddTranslation("Bloodfest Extra Cartridges Color", "血壤额外弹药颜色", "Bloodfest Extra Cartridges Color");
+            AddTranslation("Brotherhood Extra Chakra Color", "义结金兰额外斗气颜色", "Brotherhood Extra Chakra Color");
+            AddTranslation("Claimed", "已占有", "Claimed");
+            AddTranslation("Engaged", "交战中", "Engaged");
+            AddTranslation("Targeted", "已选中", "Targeted");
+            AddTranslation("This will automatically truncate the cast name if it's too long and won't fit inside the bar.", "如果施法名称过长无法放入条内，将自动截断。", "This will automatically truncate the cast name if it's too long and won't fit inside the bar.");
+            AddTranslation("Truncate Cast Name", "截断施法名称", "Truncate Cast Name");
+            AddTranslation("Unclaimed", "未占有", "Unclaimed");
+            AddTranslation("Unengaged", "未交战", "Unengaged");
+            AddTranslation("Unengaged (Hostile)", "未交战（敌对）", "Unengaged (Hostile)");
+            
         }
 
         /// <summary>
