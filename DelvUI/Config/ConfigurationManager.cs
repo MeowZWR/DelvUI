@@ -287,6 +287,8 @@ namespace DelvUI.Config
 
             foreach (string filePath in Directory.GetFiles(ConfigDirectory, "*.*", SearchOption.AllDirectories))
             {
+                if (filePath.Contains("Backups")) { continue; }
+
                 File.Copy(filePath, filePath.Replace(ConfigDirectory, backupPath), true);
             }
         }
