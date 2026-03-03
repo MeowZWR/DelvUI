@@ -30,6 +30,7 @@ namespace DelvUI
         public static ICondition Condition { get; private set; } = null!;
         public static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
         public static IDataManager DataManager { get; private set; } = null!;
+        public static IDutyState DutyState { get; private set; } = null!;
         public static IFramework Framework { get; private set; } = null!;
         public static IGameGui GameGui { get; private set; } = null!;
         public static IJobGauges JobGauges { get; private set; } = null!;
@@ -77,7 +78,8 @@ namespace DelvUI
             IPluginLog logger,
             ITextureProvider textureProvider,
             IAddonLifecycle addonLifecycle,
-            IChatGui chat)
+            IChatGui chat,
+            IDutyState dutyState)
         {
             BuddyList = buddyList;
             ClientState = clientState;
@@ -98,6 +100,7 @@ namespace DelvUI
             TextureProvider = textureProvider;
             AddonLifecycle = addonLifecycle;
             Chat = chat;
+            DutyState = dutyState;
 
             if (pluginInterface.AssemblyLocation.DirectoryName != null)
             {
