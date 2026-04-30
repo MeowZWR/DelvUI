@@ -313,7 +313,7 @@ namespace DelvUI.Interface.StatusEffects
                 return;
             }
 
-            if (_fakeEffects == null && (Actor == null || Actor.ObjectKind != ObjectKind.Player && Actor.ObjectKind != ObjectKind.BattleNpc))
+            if (_fakeEffects == null && (Actor == null || Actor.ObjectKind != ObjectKind.Pc && Actor.ObjectKind != ObjectKind.BattleNpc))
             {
                 return;
             }
@@ -468,8 +468,10 @@ namespace DelvUI.Interface.StatusEffects
                 // tooltip
                 if (Config.ShowTooltips)
                 {
-                    TooltipsHelper.Instance.ShowTooltipOnCursor(
-                        EncryptedStringsHelper.GetString(data.Data.Description.ToDalamudString().ToString()),
+                    var seString = Plugin.SeStringEvaluator.Evaluate(data.Data.Description);
+
+                    TooltipsHelper.Instance.ShowSeStringTooltipOnCursor(
+                        seString,
                         EncryptedStringsHelper.GetString(data.Data.Name.ToString()),
                         data.Status.StatusId,
                         GetStatusActorName(data.Status)

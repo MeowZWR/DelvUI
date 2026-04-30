@@ -36,6 +36,7 @@ namespace DelvUI
         public static IJobGauges JobGauges { get; private set; } = null!;
         public static IObjectTable ObjectTable { get; private set; } = null!;
         public static ISigScanner SigScanner { get; private set; } = null!;
+        public static ISeStringEvaluator SeStringEvaluator { get; private set; } = null!;
         public static IGameInteropProvider GameInteropProvider { get; private set; } = null!;
         public static ITargetManager TargetManager { get; private set; } = null!;
         public static IUiBuilder UiBuilder { get; private set; } = null!;
@@ -79,7 +80,8 @@ namespace DelvUI
             ITextureProvider textureProvider,
             IAddonLifecycle addonLifecycle,
             IChatGui chat,
-            IDutyState dutyState)
+            IDutyState dutyState,
+            ISeStringEvaluator seStringEvaluator)
         {
             BuddyList = buddyList;
             ClientState = clientState;
@@ -101,6 +103,7 @@ namespace DelvUI
             AddonLifecycle = addonLifecycle;
             Chat = chat;
             DutyState = dutyState;
+            SeStringEvaluator = seStringEvaluator;
 
             if (pluginInterface.AssemblyLocation.DirectoryName != null)
             {
@@ -111,7 +114,7 @@ namespace DelvUI
                 AssemblyLocation = Assembly.GetExecutingAssembly().Location;
             }
 
-            Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "2.6.2.1";
+            Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "2.7.0.0";
 
             FontsManager.Initialize(AssemblyLocation);
             BarTexturesManager.Initialize(AssemblyLocation);
