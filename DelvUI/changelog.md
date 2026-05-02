@@ -1,7 +1,13 @@
+# 2.7.0.1
+- Fixed Summoner's Bars.
+- Fixed Party List context menu not working.
+
+# 2.7.0.0
+- Added support for Patch 7.5 and Dalamud API 15.
+- Fixed a bug with status tooltips sometimes missing information in the description.
+
 # 2.6.2.2
 - Made resetting party cooldowns more reliable after a wipe.
-- Fixed a bug with status tooltips sometimes missing information in the description.
-- Added support for Patch 7.5 and Dalamud API 15.
 
 # 2.6.2.1
 - Re-added the unengaged color for hostile enemies in the nameplates settings.
